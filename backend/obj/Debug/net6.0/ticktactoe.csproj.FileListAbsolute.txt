@@ -25,3 +25,4 @@
 /home/kamov/Desktop/tictactoe/backend/obj/Debug/net6.0/ref/ticktactoe.dll
 /home/kamov/Desktop/tictactoe/backend/obj/Debug/net6.0/ticktactoe.pdb
 /home/kamov/Desktop/tictactoe/backend/obj/Debug/net6.0/ticktactoe.genruntimeconfig.cache
+/home/kamov/Desktop/tictactoe/backend/bin/Debug/net6.0/ticktactoe.staticwebassets.runtime.json
