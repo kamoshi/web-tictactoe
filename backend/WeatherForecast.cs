@@ -1,4 +1,4 @@
-namespace ticktactoe;
+namespace Tictactoe;
 
 public class WeatherForecast
 {

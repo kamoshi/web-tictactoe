@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace ticktactoe.Controllers;
+namespace Tictactoe.Controllers;
 
 [ApiController]
 [Route("[controller]")]
