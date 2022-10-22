@@ -12,5 +12,7 @@ public class DatabaseContext : DbContext
         optionsBuilder.UseSqlite("Filename=Database.db");
     }
     
-    public DbSet<Tictactoe.Models.Player>? Player { get; set; }
+    // Models
+    public DbSet<Player>? Player { get; set; }
+    public DbSet<Game>? Game { get; set; }
 }

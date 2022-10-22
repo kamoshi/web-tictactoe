@@ -1,124 +1,64 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tictactoe.Configuration;
 using Tictactoe.Models;
 
-namespace Tictactoe.Controllers
+namespace Tictactoe.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class Players : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class Players : ControllerBase
+    private readonly ILogger<Games> _logger;
+    private readonly DatabaseContext _context;
+
+    public Players(ILogger<Games> logger, DatabaseContext context)
     {
-        private readonly DatabaseContext _context;
+        _logger = logger;
+        _context = context;
+    }
+    
+    [HttpGet]
+    [Route("{id:long}/games")]
+    public async Task<ActionResult<IEnumerable<long>>> GetGames(long id)
+    {
+        if (_context.Player == null || _context.Game == null)
+            return NotFound();
+        
+        var user = await _context.Player.Where(p => p.Id == id).FirstOrDefaultAsync();
+        if (user is null) return NotFound();
 
-        public Players(DatabaseContext context)
-        {
-            _context = context;
-        }
+        var games = await _context.Game
+            .Where(g => g.Result == GameResult.None)
+            .Where(g => g.PlayerO != null && g.PlayerO.Id == id || g.PlayerX != null && g.PlayerX.Id == id)
+            .Select(g => g.Id)
+            .ToListAsync();
 
-        // GET: api/Players
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Player>>> GetPlayer()
-        {
-          if (_context.Player == null)
-          {
-              return NotFound();
-          }
-            return await _context.Player.ToListAsync();
-        }
+        return games;
+    }
 
-        // GET: api/Players/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Player>> GetPlayer(long id)
-        {
-          if (_context.Player == null)
-          {
-              return NotFound();
-          }
-            var player = await _context.Player.FindAsync(id);
+    [HttpGet]
+    [Route("{id:long}/stats")]
+    public async Task<ActionResult<Models.Dtos.PlayerStats>> GetStats(long id)
+    {
+        if (_context.Player == null || _context.Game == null)
+            return NotFound();
 
-            if (player == null)
-            {
-                return NotFound();
-            }
+        if (await _context.Player.Where(p => p.Id == id).FirstOrDefaultAsync() == null)
+            return NotFound();
+        
+        var games = await _context.Game
+            .Where(g => g.Result != GameResult.None)
+            .Where(g => g.PlayerO != null && g.PlayerO.Id == id || g.PlayerX != null && g.PlayerX.Id == id)
+            .ToListAsync();
 
-            return player;
-        }
+        var asO = games.Where(g => g.PlayerO!.Id == id).ToList();
+        var asX = games.Where(g => g.PlayerX!.Id == id).ToList();
 
-        // PUT: api/Players/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPlayer(long id, Player player)
-        {
-            if (id != player.Id)
-            {
-                return BadRequest();
-            }
+        var w = asO.Count(g => g.Result == GameResult.WinO) + asX.Count(g => g.Result == GameResult.WinX);
+        var l = asO.Count(g => g.Result == GameResult.WinX) + asX.Count(g => g.Result == GameResult.WinO);
+        var t = games.Count(g => g.Result == GameResult.Tied);
 
-            _context.Entry(player).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PlayerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Players
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Player>> PostPlayer(Player player)
-        {
-          if (_context.Player == null)
-          {
-              return Problem("Entity set 'DatabaseContext.Player'  is null.");
-          }
-            _context.Player.Add(player);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetPlayer", new { id = player.Id }, player);
-        }
-
-        // DELETE: api/Players/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePlayer(long id)
-        {
-            if (_context.Player == null)
-            {
-                return NotFound();
-            }
-            var player = await _context.Player.FindAsync(id);
-            if (player == null)
-            {
-                return NotFound();
-            }
-
-            _context.Player.Remove(player);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool PlayerExists(long id)
-        {
-            return (_context.Player?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
+        return new Models.Dtos.PlayerStats(w, l, t);
     }
 }
