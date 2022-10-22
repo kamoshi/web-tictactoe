@@ -9,19 +9,18 @@ public class GameEngine
     public GameEngine(IReadOnlyCollection<BoardRow> rows)
     {
         _board = new Cell[rows.Count, 3];
-        foreach (var (r, cells) in rows.Select((row, i) => (i, row.AsCells())))
-        foreach (var (c, cell) in cells.Select((cell, i) => (i, cell)))
+        foreach (var (r, c, cell) in rows.SelectMany((row, r) => row.AsCells().Select((cell, c) => (r, c, cell))))
             _board[r, c] = cell;
     }
 
-    public GameResult? MakeMove(Move move, int r, int c)
+    public GameState? MakeMove(Move move, int row, int col)
     {
-        var cell = _board[r, c];
+        var cell = _board[row, col];
         if (cell != Cell.None) return null;
 
         var possible = move.AsPossibleGameResult();
-        _board[r, c] = move.AsCell();
-        if (CheckCol(c) == possible || CheckRow(r) == possible || CheckDiagonals() == possible)
+        _board[row, col] = move.AsCell();
+        if (CheckCol(col) == possible || CheckRow(row) == possible || CheckDiagonals() == possible)
             return possible;
 
         return CheckTie();
@@ -40,37 +39,55 @@ public class GameEngine
         return os == xs ? Move.O : Move.X;
     }
 
-    public GameResult CheckResult()
+    public GameState CheckState()
     {
         for (var r = 0; r < _board.GetLength(0); r++) 
             switch (CheckRow(r))
             {
-                case GameResult.WinO: return GameResult.WinO;
-                case GameResult.WinX: return GameResult.WinX;
+                case GameState.WinO: return GameState.WinO;
+                case GameState.WinX: return GameState.WinX;
             }
 
         for (var c = 0; c < _board.GetLength(1); c++)
             switch (CheckCol(c))
             {
-                case GameResult.WinO: return GameResult.WinO;
-                case GameResult.WinX: return GameResult.WinX;
+                case GameState.WinO: return GameState.WinO;
+                case GameState.WinX: return GameState.WinX;
             }
         
         switch (CheckDiagonals())
         {
-            case GameResult.WinO: return GameResult.WinO;
-            case GameResult.WinX: return GameResult.WinX;
+            case GameState.WinO: return GameState.WinO;
+            case GameState.WinX: return GameState.WinX;
         }
 
         return CheckTie();
     }
-    
-    private GameResult CheckTie()
+
+    public char[][] GetBoardChars()
     {
-        return _board.Cast<Cell>().Any(c => c == Cell.None) ? GameResult.None : GameResult.Tied;
+        int rows = _board.GetLength(0), cols = _board.GetLength(1);
+        var result = new char[rows][];
+        for (var r = 0; r < rows; r++)
+        {
+            result[r] = new char[cols];
+            for (var c = 0; c < cols; c++)
+                result[r][c] = _board[r, c].AsChar();
+        }
+        return result;
+    }
+    
+    public BoardRow[] GetBoardRows()
+    {
+        return _board.AsBoardRows();
+    }
+    
+    private GameState CheckTie()
+    {
+        return _board.Cast<Cell>().Any(c => c == Cell.None) ? GameState.None : GameState.Tied;
     }
 
-    private GameResult CheckRow(int offsetR)
+    private GameState CheckRow(int offsetR)
     {
         bool o = true, x = true;
         for (var c = 0; c < _board.GetLength(1); c++)
@@ -78,10 +95,10 @@ public class GameEngine
             o &= Cell.O == _board[offsetR, c];
             x &= Cell.X == _board[offsetR, c];
         }
-        return x ? GameResult.WinX : o ? GameResult.WinO : GameResult.None;
+        return x ? GameState.WinX : o ? GameState.WinO : GameState.None;
     }
     
-    private GameResult CheckCol(int offsetC)
+    private GameState CheckCol(int offsetC)
     {
         bool o = true, x = true;
         for (var r = 0; r < _board.GetLength(0); r++)
@@ -89,10 +106,10 @@ public class GameEngine
             o &= Cell.O == _board[r, offsetC];
             x &= Cell.X == _board[r, offsetC];
         }
-        return x ? GameResult.WinX : o ? GameResult.WinO : GameResult.None;
+        return x ? GameState.WinX : o ? GameState.WinO : GameState.None;
     }
 
-    private GameResult CheckDiagonals()
+    private GameState CheckDiagonals()
     {
         int r = 0, c = 0; bool o = true, x = true;
         while (r < _board.GetLength(0) && c < _board.GetLength(1))
@@ -101,8 +118,8 @@ public class GameEngine
             x &= Cell.X == _board[r++, c++];
         }
 
-        if (o) return GameResult.WinO;
-        if (x) return GameResult.WinX;
+        if (o) return GameState.WinO;
+        if (x) return GameState.WinX;
 
         r = 0; c = _board.GetLength(1); o = true; x = true;
         while (r < _board.GetLength(0) && c > 0)
@@ -111,7 +128,7 @@ public class GameEngine
             x &= Cell.X == _board[r++, c];
         }
         
-        return x ? GameResult.WinX : o ? GameResult.WinO : GameResult.None;
+        return x ? GameState.WinX : o ? GameState.WinO : GameState.None;
     }
     
 }

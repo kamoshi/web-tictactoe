@@ -29,7 +29,7 @@ public class Players : ControllerBase
         if (user is null) return NotFound();
 
         var games = await _context.Game
-            .Where(g => g.Result == GameResult.None)
+            .Where(g => g.State == GameState.None)
             .Where(g => g.PlayerO != null && g.PlayerO.Id == id || g.PlayerX != null && g.PlayerX.Id == id)
             .Select(g => g.Id)
             .ToListAsync();
@@ -39,7 +39,7 @@ public class Players : ControllerBase
 
     [HttpGet]
     [Route("{id:long}/stats")]
-    public async Task<ActionResult<Models.Dtos.PlayerStats>> GetStats(long id)
+    public async Task<ActionResult<Models.Dtos.PlayerStatsDto>> GetStats(long id)
     {
         if (_context.Player == null || _context.Game == null)
             return NotFound();
@@ -48,17 +48,17 @@ public class Players : ControllerBase
             return NotFound();
         
         var games = await _context.Game
-            .Where(g => g.Result != GameResult.None)
+            .Where(g => g.State != GameState.None)
             .Where(g => g.PlayerO != null && g.PlayerO.Id == id || g.PlayerX != null && g.PlayerX.Id == id)
             .ToListAsync();
 
         var asO = games.Where(g => g.PlayerO!.Id == id).ToList();
         var asX = games.Where(g => g.PlayerX!.Id == id).ToList();
 
-        var w = asO.Count(g => g.Result == GameResult.WinO) + asX.Count(g => g.Result == GameResult.WinX);
-        var l = asO.Count(g => g.Result == GameResult.WinX) + asX.Count(g => g.Result == GameResult.WinO);
-        var t = games.Count(g => g.Result == GameResult.Tied);
+        var w = asO.Count(g => g.State == GameState.WinO) + asX.Count(g => g.State == GameState.WinX);
+        var l = asO.Count(g => g.State == GameState.WinX) + asX.Count(g => g.State == GameState.WinO);
+        var t = games.Count(g => g.State == GameState.Tied);
 
-        return new Models.Dtos.PlayerStats(w, l, t);
+        return new Models.Dtos.PlayerStatsDto(w, l, t);
     }
 }

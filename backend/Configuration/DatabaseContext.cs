@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Tictactoe.Models;
 
 namespace Tictactoe.Configuration;
 
@@ -13,6 +12,6 @@ public class DatabaseContext : DbContext
     }
     
     // Models
-    public DbSet<Player>? Player { get; set; }
-    public DbSet<Game>? Game { get; set; }
+    public DbSet<Models.Entities.Player>? Player { get; set; }
+    public DbSet<Models.Entities.Game>? Game { get; set; }
 }

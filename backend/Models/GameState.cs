@@ -1,6 +1,6 @@
 namespace Tictactoe.Models;
 
-public enum GameResult : byte
+public enum GameState
 {
     None = 0,
     Tied = 1,

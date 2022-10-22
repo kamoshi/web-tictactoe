@@ -27,7 +27,7 @@ namespace Tictactoe.Migrations
                 {
                     Id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Result = table.Column<byte>(type: "INTEGER", nullable: false),
+                    State = table.Column<int>(type: "INTEGER", nullable: false),
                     PlayerOId = table.Column<long>(type: "INTEGER", nullable: true),
                     PlayerXId = table.Column<long>(type: "INTEGER", nullable: true),
                     Top = table.Column<byte>(type: "INTEGER", nullable: false),
