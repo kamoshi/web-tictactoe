@@ -17,7 +17,7 @@ namespace Tictactoe.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.10");
 
-            modelBuilder.Entity("Tictactoe.Models.Game", b =>
+            modelBuilder.Entity("Tictactoe.Models.Entities.Game", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -35,7 +35,7 @@ namespace Tictactoe.Migrations
                     b.Property<long?>("PlayerXId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<byte>("Result")
+                    b.Property<int>("State")
                         .HasColumnType("INTEGER");
 
                     b.Property<byte>("Top")
@@ -50,7 +50,7 @@ namespace Tictactoe.Migrations
                     b.ToTable("Game");
                 });
 
-            modelBuilder.Entity("Tictactoe.Models.Player", b =>
+            modelBuilder.Entity("Tictactoe.Models.Entities.Player", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -65,13 +65,13 @@ namespace Tictactoe.Migrations
                     b.ToTable("Player");
                 });
 
-            modelBuilder.Entity("Tictactoe.Models.Game", b =>
+            modelBuilder.Entity("Tictactoe.Models.Entities.Game", b =>
                 {
-                    b.HasOne("Tictactoe.Models.Player", "PlayerO")
+                    b.HasOne("Tictactoe.Models.Entities.Player", "PlayerO")
                         .WithMany()
                         .HasForeignKey("PlayerOId");
 
-                    b.HasOne("Tictactoe.Models.Player", "PlayerX")
+                    b.HasOne("Tictactoe.Models.Entities.Player", "PlayerX")
                         .WithMany()
                         .HasForeignKey("PlayerXId");
 
