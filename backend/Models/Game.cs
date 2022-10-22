@@ -13,4 +13,12 @@ public class Game
     public BoardRow Top { get; set; }
     public BoardRow Mid { get; set; }
     public BoardRow Bot { get; set; }
+
+    public Game(Player player)
+    {
+        PlayerO = player;
+        Top = BoardRow.Empty;
+        Mid = BoardRow.Empty;
+        Bot = BoardRow.Empty;
+    }
 }

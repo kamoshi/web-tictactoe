@@ -25,15 +25,26 @@ public class Games : ControllerBase
         if (_context.Game == null || _context.Player == null)
             return NotFound();
 
-        var ongoing = await _context.Game
+        var me = await _context.Player.FirstOrDefaultAsync(p => p.Id == playerId);
+        if (me == null) return NotFound();
+
+        var mine = await _context.Game
             .Where(g => g.Result == GameResult.None)
             .Where(g => g.PlayerO != null && g.PlayerO.Id == playerId || g.PlayerX != null && g.PlayerX.Id == playerId)
-            .ToListAsync();
+            .FirstOrDefaultAsync();
+        if (mine != null) return mine.Id;
 
-        if (ongoing.Any())
-            return ongoing.First().Id;
+        var other = await _context.Game.Where(g => g.PlayerX == null).FirstOrDefaultAsync();
+        if (other != null)
+        {
+            other.PlayerX = me;
+            await _context.SaveChangesAsync();
+            return other.Id;
+        }
         
-        
-        return NotFound();
+        var newGame = new Game(me);
+        await _context.Game.AddAsync(newGame);
+
+        return newGame.Id;
     }
 }

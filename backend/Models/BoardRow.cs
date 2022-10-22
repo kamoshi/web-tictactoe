@@ -5,6 +5,7 @@ namespace Tictactoe.Models;
 [Flags]
 public enum BoardRow : byte
 {
+    Empty = 0,
     Lo = 1 << 0,
     Lx = 1 << 1,
     Mo = 1 << 2,
