@@ -156,7 +156,8 @@ export class GameViewComponent implements OnInit, OnDestroy {
   }
 
   private joinGame() {
-    this.http.post<number>(`https://localhost:7135/join/${this._identity?.id}`, {})
+    if (!this._identity?.id) return;
+    this.http.post<number>(`https://localhost:7135/api/Games/join`, { playerId: this._identity.id })
       .subscribe({
         next: gameId => this.gameId = gameId,
         error: err => console.error(err)
