@@ -5,6 +5,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { GameEndDialogComponent } from "./game-end-dialog.component";
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { GameEndDialogComponent } from "./game-end-dialog.component";
     MatProgressSpinnerModule,
     MatCardModule,
     MatDialogModule,
+    MatButtonModule,
   ]
 })
 export class GameModule { }

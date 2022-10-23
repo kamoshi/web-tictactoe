@@ -21,11 +21,9 @@ import {IdentityService} from "./identity.service";
   `]
 })
 export class AppComponent {
-  identity: Identity | null;
 
   constructor(
-    private _identityService: IdentityService
-  ) {
-    this.identity = _identityService.load();
-  }
+    public identity: IdentityService
+  ) {}
+
 }

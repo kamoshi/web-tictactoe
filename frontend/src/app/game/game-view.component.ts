@@ -78,20 +78,17 @@ import {GameEndDialogComponent} from "./game-end-dialog.component";
   `]
 })
 export class GameViewComponent implements OnInit, OnDestroy {
-  private readonly _identity: Identity | null;
   private gameId?: number;
   private _refresher?: Subscription;
   private _modalOpened = false;
   data?: GameDto;
 
   constructor(
-    private _identityService: IdentityService,
     private http: HttpClient,
     private router: Router,
+    public identity: IdentityService,
     public dialog: MatDialog,
-  ) {
-    this._identity = _identityService.load()
-  }
+  ) {}
 
   openDialog() {
     if (this._modalOpened) return;
@@ -122,7 +119,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    if (!this._identity)
+    if (!this.identity.isLoggedIn)
       await this.router.navigate(['login']);
 
     this.joinGame();
@@ -146,9 +143,10 @@ export class GameViewComponent implements OnInit, OnDestroy {
   }
 
   onMove(row: number, col: number) {
-    if (!this._identity) return;
+    if (!this.identity.isLoggedIn)
+      return;
 
-    this.http.put<GameDto>(`https://localhost:7135/api/Games/${this.gameId}`, { playerId: this._identity.id, row, col})
+    this.http.put<GameDto>(`https://localhost:7135/api/Games/${this.gameId}`, { playerId: this.identity.id, row, col})
       .subscribe({
         next: value => this.data = value,
         error: err => console.error(err),
@@ -156,8 +154,10 @@ export class GameViewComponent implements OnInit, OnDestroy {
   }
 
   private joinGame() {
-    if (!this._identity?.id) return;
-    this.http.post<number>(`https://localhost:7135/api/Games/join`, { playerId: this._identity.id })
+    if (!this.identity.isLoggedIn)
+      return;
+
+    this.http.post<number>(`https://localhost:7135/api/Games/join`, { playerId: this.identity.id })
       .subscribe({
         next: gameId => this.gameId = gameId,
         error: err => console.error(err)
