@@ -66,7 +66,7 @@ public class Games : ControllerBase
         
         var engine = new GameEngine(new[]{game.Top, game.Mid, game.Bot});
         
-        return new GameDto(game.PlayerO?.Name, game.PlayerX?.Name, engine.GetBoardChars(), engine.CheckMove(), engine.CheckState());
+        return new GameDto(game.PlayerO?.Name, game.PlayerX?.Name, engine.GetBoardChars(), engine.CheckMove(), game.State);
     }
 
     [HttpPut]
@@ -94,7 +94,7 @@ public class Games : ControllerBase
             if (result == null) return BadRequest();
 
             var rows = engine.GetBoardRows();
-            game.State = result.Value;
+            game.State = engine.CheckState();
             game.Top = rows[0];
             game.Mid = rows[1];
             game.Bot = rows[2];
