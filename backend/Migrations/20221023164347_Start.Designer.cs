@@ -11,7 +11,7 @@ using Tictactoe.Configuration;
 namespace Tictactoe.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20221022210405_Start")]
+    [Migration("20221023164347_Start")]
     partial class Start
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,10 +25,7 @@ namespace Tictactoe.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<byte>("Bot")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<byte>("Mid")
+                    b.Property<ulong>("Board")
                         .HasColumnType("INTEGER");
 
                     b.Property<long?>("PlayerOId")
@@ -38,9 +35,6 @@ namespace Tictactoe.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("State")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<byte>("Top")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");

@@ -23,10 +23,7 @@ namespace Tictactoe.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<byte>("Bot")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<byte>("Mid")
+                    b.Property<ulong>("Board")
                         .HasColumnType("INTEGER");
 
                     b.Property<long?>("PlayerOId")
@@ -36,9 +33,6 @@ namespace Tictactoe.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("State")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<byte>("Top")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");

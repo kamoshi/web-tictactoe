@@ -1,12 +1,12 @@
-using System.Diagnostics;
-
 namespace Tictactoe.Models;
 
-public enum Cell
+[Flags]
+public enum Cell : byte
 {
-    None = 0,
-    O = 1,
-    X = 2,
+    Empty = 0,
+    O = 1 << 0,
+    X = 1 << 1,
+    Both = 1 << 2,
 }
 
 public static class CellExtensions
@@ -15,32 +15,20 @@ public static class CellExtensions
     {
         return cell switch
         {
-            Cell.None => ' ',
+            Cell.Empty => ' ',
             Cell.O => 'O',
             Cell.X => 'X',
             _ => throw new ArgumentOutOfRangeException(nameof(cell), cell, null)
         };
     }
 
-    public static BoardRow[] AsBoardRows(this Cell[,] cells)
+    public static Board AsBoard(this Cell[,] cells)
     {
-        var rows = cells.GetLength(0);
-        var cols = cells.GetLength(1);
-        var boardRows = new BoardRow[rows];
-        for (var r = 0; r < rows; r++)
-        {
-            var row = new BoardRow();
-            for (var c = 0; c < cols; c++)
-            {
-                row |= (BoardRow) (cells[r, c] switch
-                {
-                    Cell.O => 1 << c * 2,
-                    Cell.X => 1 << c * 2 + 1,
-                    _ => 0
-                });
-            }
-            boardRows[r] = row;
-        }
-        return boardRows;
+        var size = cells.GetLength(0);
+        var board = Board.Empty;
+        for (var r = 0; r < size; r++)
+        for (var c = 0; c < size; c++)
+            board |= (Board) ((byte) cells[r, c] << ((size * r + c) * 2));
+        return board;
     }
 }

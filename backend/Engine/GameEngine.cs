@@ -4,30 +4,29 @@ namespace Tictactoe.Engine;
 
 public class GameEngine
 {
-    private readonly Cell[,] _board;
+    private readonly Cell[,] _cells;
+    public Board Board => _cells.AsBoard();
     
-    public GameEngine(IReadOnlyCollection<BoardRow> rows)
+    public GameEngine(Board board, int size)
     {
-        _board = new Cell[rows.Count, 3];
-        foreach (var (r, c, cell) in rows.SelectMany((row, r) => row.AsCells().Select((cell, c) => (r, c, cell))))
-            _board[r, c] = cell;
+        _cells = board.AsCells(size);
     }
 
     public GameState? MakeMove(Move move, int row, int col)
     {
         if (move != CheckMove())
             return null;
-        var cell = _board[row, col];
-        if (cell != Cell.None)
+        var cell = _cells[row, col];
+        if (cell != Cell.Empty)
             return null;
-        _board[row, col] = move.AsCell();
+        _cells[row, col] = move.AsCell();
         return CheckState();
     }
 
     public Move CheckMove()
     {
         int os = 0, xs = 0;
-        foreach (var cell in _board)
+        foreach (var cell in _cells)
             switch (cell)
             {
                 case Cell.O: os += 1; break;
@@ -39,14 +38,14 @@ public class GameEngine
 
     public GameState CheckState()
     {
-        for (var r = 0; r < _board.GetLength(0); r++) 
+        for (var r = 0; r < _cells.GetLength(0); r++) 
             switch (CheckRow(r))
             {
                 case GameState.WinO: return GameState.WinO;
                 case GameState.WinX: return GameState.WinX;
             }
 
-        for (var c = 0; c < _board.GetLength(1); c++)
+        for (var c = 0; c < _cells.GetLength(1); c++)
             switch (CheckCol(c))
             {
                 case GameState.WinO: return GameState.WinO;
@@ -64,34 +63,29 @@ public class GameEngine
 
     public char[][] GetBoardChars()
     {
-        int rows = _board.GetLength(0), cols = _board.GetLength(1);
+        int rows = _cells.GetLength(0), cols = _cells.GetLength(1);
         var result = new char[rows][];
         for (var r = 0; r < rows; r++)
         {
             result[r] = new char[cols];
             for (var c = 0; c < cols; c++)
-                result[r][c] = _board[r, c].AsChar();
+                result[r][c] = _cells[r, c].AsChar();
         }
         return result;
     }
-    
-    public BoardRow[] GetBoardRows()
-    {
-        return _board.AsBoardRows();
-    }
-    
+
     private GameState CheckTie()
     {
-        return _board.Cast<Cell>().Any(c => c == Cell.None) ? GameState.None : GameState.Tied;
+        return _cells.Cast<Cell>().Any(c => c == Cell.Empty) ? GameState.None : GameState.Tied;
     }
 
     private GameState CheckRow(int offsetR)
     {
         bool o = true, x = true;
-        for (var c = 0; c < _board.GetLength(1); c++)
+        for (var c = 0; c < _cells.GetLength(1); c++)
         {
-            o &= Cell.O == _board[offsetR, c];
-            x &= Cell.X == _board[offsetR, c];
+            o &= Cell.O == _cells[offsetR, c];
+            x &= Cell.X == _cells[offsetR, c];
         }
         return x ? GameState.WinX : o ? GameState.WinO : GameState.None;
     }
@@ -99,10 +93,10 @@ public class GameEngine
     private GameState CheckCol(int offsetC)
     {
         bool o = true, x = true;
-        for (var r = 0; r < _board.GetLength(0); r++)
+        for (var r = 0; r < _cells.GetLength(0); r++)
         {
-            o &= Cell.O == _board[r, offsetC];
-            x &= Cell.X == _board[r, offsetC];
+            o &= Cell.O == _cells[r, offsetC];
+            x &= Cell.X == _cells[r, offsetC];
         }
         return x ? GameState.WinX : o ? GameState.WinO : GameState.None;
     }
@@ -110,20 +104,20 @@ public class GameEngine
     private GameState CheckDiagonals()
     {
         int r = 0, c = 0; bool o = true, x = true;
-        while (r < _board.GetLength(0) && c < _board.GetLength(1))
+        while (r < _cells.GetLength(0) && c < _cells.GetLength(1))
         {
-            o &= Cell.O == _board[r, c];
-            x &= Cell.X == _board[r++, c++];
+            o &= Cell.O == _cells[r, c];
+            x &= Cell.X == _cells[r++, c++];
         }
 
         if (o) return GameState.WinO;
         if (x) return GameState.WinX;
 
-        r = 0; c = _board.GetLength(1); o = true; x = true;
-        while (r < _board.GetLength(0) && c > 0)
+        r = 0; c = _cells.GetLength(1); o = true; x = true;
+        while (r < _cells.GetLength(0) && c > 0)
         {
-            o &= Cell.O == _board[r, --c];
-            x &= Cell.X == _board[r++, c];
+            o &= Cell.O == _cells[r, --c];
+            x &= Cell.X == _cells[r++, c];
         }
         
         return x ? GameState.WinX : o ? GameState.WinO : GameState.None;

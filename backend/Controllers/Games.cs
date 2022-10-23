@@ -63,7 +63,7 @@ public class Games : ControllerBase
             .FirstOrDefaultAsync(g => g.Id == gameId);
         if (game == null) return NotFound();
         
-        var engine = new GameEngine(new[]{game.Top, game.Mid, game.Bot});
+        var engine = new GameEngine(game.Board, game.Size);
         
         return new GameDto(game.PlayerO?.Name, game.PlayerX?.Name, engine.GetBoardChars(), engine.CheckMove(), game.State);
     }
@@ -81,7 +81,7 @@ public class Games : ControllerBase
         if (game == null || game.PlayerO?.Id != moveDto.PlayerId && game.PlayerX?.Id != moveDto.PlayerId)
             return NotFound();
         
-        var engine = new GameEngine(new[]{game.Top, game.Mid, game.Bot});
+        var engine = new GameEngine(game.Board, game.Size);
         
         if (game.State == GameState.None)
         {
@@ -93,12 +93,9 @@ public class Games : ControllerBase
 
             var result = engine.MakeMove(isO ? Move.O : Move.X, moveDto.Row, moveDto.Col);
             if (result == null) return BadRequest();
-
-            var rows = engine.GetBoardRows();
+            
             game.State = engine.CheckState();
-            game.Top = rows[0];
-            game.Mid = rows[1];
-            game.Bot = rows[2];
+            game.Board = engine.Board;
             await _context.SaveChangesAsync();
         }
         

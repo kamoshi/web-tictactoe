@@ -30,9 +30,7 @@ namespace Tictactoe.Migrations
                     State = table.Column<int>(type: "INTEGER", nullable: false),
                     PlayerOId = table.Column<long>(type: "INTEGER", nullable: true),
                     PlayerXId = table.Column<long>(type: "INTEGER", nullable: true),
-                    Top = table.Column<byte>(type: "INTEGER", nullable: false),
-                    Mid = table.Column<byte>(type: "INTEGER", nullable: false),
-                    Bot = table.Column<byte>(type: "INTEGER", nullable: false)
+                    Board = table.Column<ulong>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

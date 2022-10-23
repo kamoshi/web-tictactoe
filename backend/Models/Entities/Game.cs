@@ -10,17 +10,14 @@ public class Game
     public Player? PlayerX { get; set; }
     
     // Board
-    public BoardRow Top { get; set; }
-    public BoardRow Mid { get; set; }
-    public BoardRow Bot { get; set; }
+    public byte Size = 3;
+    public Board Board { get; set; }
     
     public Game() {}
 
     public Game(Player player)
     {
         PlayerO = player;
-        Top = BoardRow.Empty;
-        Mid = BoardRow.Empty;
-        Bot = BoardRow.Empty;
+        Board = Board.Empty;
     }
 }
