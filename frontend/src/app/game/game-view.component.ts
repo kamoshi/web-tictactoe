@@ -5,6 +5,7 @@ import { HttpClient } from "@angular/common/http";
 import { interval, Subscription } from "rxjs";
 import {MatDialog} from "@angular/material/dialog";
 import {GameEndDialogComponent} from "./game-end-dialog.component";
+import {ApiService} from "../api.service";
 
 @Component({
   selector: 'app-game-view',
@@ -88,6 +89,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
     private router: Router,
     public identity: IdentityService,
     public dialog: MatDialog,
+    private api: ApiService,
   ) {}
 
   openDialog() {
@@ -130,11 +132,10 @@ export class GameViewComponent implements OnInit, OnDestroy {
       if (this.data !== undefined && this.data.state !== 0)
         this.openDialog();
 
-      this.http.get<GameDto>(`https://localhost:7135/api/Games/${this.gameId}`)
-        .subscribe({
-          next: data => this.data = data,
-          error: err => console.error(err),
-        })
+      this.api.getGame(this.gameId).subscribe({
+        next: data => this.data = data,
+        error: err => console.error(err),
+      });
     })
   }
 
@@ -143,24 +144,22 @@ export class GameViewComponent implements OnInit, OnDestroy {
   }
 
   onMove(row: number, col: number) {
-    if (!this.identity.isLoggedIn)
+    if (!this.gameId || !this.identity.id)
       return;
 
-    this.http.put<GameDto>(`https://localhost:7135/api/Games/${this.gameId}`, { playerId: this.identity.id, row, col})
-      .subscribe({
+    this.api.move(this.gameId, this.identity.id, row, col).subscribe({
         next: value => this.data = value,
         error: err => console.error(err),
       })
   }
 
   private joinGame() {
-    if (!this.identity.isLoggedIn)
+    if (!this.identity.id)
       return;
 
-    this.http.post<number>(`https://localhost:7135/api/Games/join`, { playerId: this.identity.id })
-      .subscribe({
-        next: gameId => this.gameId = gameId,
-        error: err => console.error(err)
-      });
+    this.api.joinGame(this.identity.id).subscribe({
+      next: gameId => this.gameId = gameId,
+      error: err => console.error(err)
+    });
   }
 }

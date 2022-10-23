@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {IdentityService} from "../identity.service";
 import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {ApiService} from "../api.service";
 
 @Component({
   selector: 'app-login-view',
@@ -39,22 +40,21 @@ export class LoginViewComponent {
     private router: Router,
     private identity: IdentityService,
     private _snackBar: MatSnackBar,
+    private api: ApiService,
   ) {}
 
   onChoose() {
     if (!this.username.length)
       return;
 
-    this.http.post<number>('https://localhost:7135/api/Auth', { name: this.username })
-      .subscribe({
-        next: async id => {
-          this.identity.save({ name: this.username, id });
-          this._snackBar.open(`Logged in as ${this.username}`, undefined, { duration: 2000 });
-          await this.router.navigate(['']);
-        },
-        error: err => console.error(err)
-      })
-
+    this.api.login(this.username).subscribe({
+      next: async id => {
+        this.identity.save({ name: this.username, id });
+        this._snackBar.open(`Logged in as ${this.username}`, undefined, { duration: 2000 });
+        await this.router.navigate(['']);
+      },
+      error: err => console.error(err)
+    })
   }
 
 }

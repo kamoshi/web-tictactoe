@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
+import {ApiService} from "../api.service";
 
 @Component({
   selector: 'app-leaderboard-view',
@@ -33,15 +34,14 @@ export class LeaderboardViewComponent implements OnInit {
   leaderboard: LeaderboardDto[] = [];
 
   constructor(
-    private http: HttpClient,
+    private api: ApiService,
   ) { }
 
   ngOnInit(): void {
-    this.http.get<LeaderboardDto[]>('https://localhost:7135/api/Players/leaderboard')
-      .subscribe({
-        next: value => this.leaderboard = value,
-        error: err => console.error(err),
-      });
+    this.api.getLeaderboard().subscribe({
+      next: value => this.leaderboard = value,
+      error: err => console.error(err),
+    });
   }
 
 }
