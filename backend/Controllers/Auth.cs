@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tictactoe.Configuration;
+using Tictactoe.Models.Dtos;
 using Tictactoe.Models.Entities;
 
 namespace Tictactoe.Controllers;
@@ -19,15 +20,15 @@ public class Auth : ControllerBase
     }
 
     [HttpPost(Name = "Login")]
-    public async Task<ActionResult<long>> Login(string name)
+    public async Task<ActionResult<long>> Login([FromBody] LoginDto loginDto)
     {
         if (_context.Player is null)
             return NotFound();
 
-        var player = await _context.Player.Where(p => p.Name == name).FirstOrDefaultAsync();
+        var player = await _context.Player.Where(p => p.Name == loginDto.Name).FirstOrDefaultAsync();
         if (player is null)
         {
-            player = new Player(name);
+            player = new Player(loginDto.Name);
             await _context.Player.AddAsync(player);
             await _context.SaveChangesAsync();
         }
