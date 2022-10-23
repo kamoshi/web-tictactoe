@@ -12,8 +12,8 @@ public static class MoveExtensions
     {
         return move switch
         {
-            Move.O => Cell.X,
-            Move.X => Cell.O,
+            Move.O => Cell.O,
+            Move.X => Cell.X,
             _ => throw new ArgumentOutOfRangeException(nameof(move), move, null)
         };
     }

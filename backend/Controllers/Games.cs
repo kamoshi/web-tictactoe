@@ -22,18 +22,17 @@ public class Games : ControllerBase
     }
 
     [HttpPost]
-    [Route("/join/{playerId}")]
-    public async Task<ActionResult<long>> Start(long playerId)
+    [Route("join")]
+    public async Task<ActionResult<long>> Start([FromBody] JoinGameDto joinGameDto)
     {
         if (_context.Game == null || _context.Player == null)
             return NotFound();
 
-        var me = await _context.Player.FirstOrDefaultAsync(p => p.Id == playerId);
+        var me = await _context.Player.FirstOrDefaultAsync(p => p.Id == joinGameDto.PlayerId);
         if (me == null) return NotFound();
 
         var mine = await _context.Game
-            .Where(g => g.State == GameState.None)
-            .Where(g => g.PlayerO != null && g.PlayerO.Id == playerId || g.PlayerX != null && g.PlayerX.Id == playerId)
+            .Where(g => g.State == GameState.None && (g.PlayerO!.Id == me.Id || g.PlayerX!.Id == me.Id))
             .FirstOrDefaultAsync();
         if (mine != null) return mine.Id;
 
@@ -87,7 +86,9 @@ public class Games : ControllerBase
         if (game.State == GameState.None)
         {
             var isO = game.PlayerO?.Id == moveDto.PlayerId;
-            if (isO && engine.CheckMove() == Move.X)
+            var currentMove = engine.CheckMove();
+            
+            if ((isO && currentMove != Move.O) || !isO && currentMove == Move.O )
                 return BadRequest();
 
             var result = engine.MakeMove(isO ? Move.O : Move.X, moveDto.Row, moveDto.Col);

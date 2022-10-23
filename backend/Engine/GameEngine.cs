@@ -15,15 +15,13 @@ public class GameEngine
 
     public GameState? MakeMove(Move move, int row, int col)
     {
+        if (move != CheckMove())
+            return null;
         var cell = _board[row, col];
-        if (cell != Cell.None) return null;
-
-        var possible = move.AsPossibleGameResult();
+        if (cell != Cell.None)
+            return null;
         _board[row, col] = move.AsCell();
-        if (CheckCol(col) == possible || CheckRow(row) == possible || CheckDiagonals() == possible)
-            return possible;
-
-        return CheckTie();
+        return CheckState();
     }
 
     public Move CheckMove()
