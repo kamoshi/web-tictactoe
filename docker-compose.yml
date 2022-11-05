@@ -3,12 +3,14 @@ version: "3.9"
 services:
   frontend:
     build: ./frontend/
+    image: kamov/tictactoe-frontend
     ports:
       - 4200:80
     links:
       - backend
   backend:
     build: ./backend/
+    image: kamov/tictactoe-backend
     ports:
       - 7135:80
     environment:

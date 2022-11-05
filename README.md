@@ -55,7 +55,7 @@ Installing CLI...
 Done!
 ```
 
-```bash
+```
 kamov@msi:~$ docker context create ecs awstictactoe
 ? Create a Docker context using:  [Use arrows to move, type to filter]
 > AWS secret and token credentials
@@ -175,4 +175,36 @@ service frontend doesn't define a Docker image to run: incompatible attribute
 
 Spróbowałem naprawić błąd na podstawie tego poradnika:
 https://www.docker.com/blog/docker-compose-from-local-to-amazon-ecs/
+
+Stworzyłem konto na Docker Hub, a następnie spushowałem obrazy.
+```
+kamov@msi:~/Desktop/tictactoe (main)$ docker compose build
+[+] Building 65.8s (35/35) FINISHED                                                                                                                            ...
+
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
+kamov@msi:~/Desktop/tictactoe (main)$ docker login
+Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+Username: kamov
+Password: 
+WARNING! Your password will be stored unencrypted in /home/kamov/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+
+Logging in with your password grants your terminal complete access to your account. 
+For better security, log in with a limited-privilege personal access token. Learn more at https://docs.docker.com/go/access-tokens/
+kamov@msi:~/Desktop/tictactoe (main)$ docker compose push
+[+] Running 1/18
+ ⠿ database Skipped                                                                                                                            ...
+kamov@msi:~/Desktop/tictactoe (main)$ 
+```
+
+Spróbowałem wywołać `docker compose up` ale pokazał się błąd związany z mapowanie portów w kontenerach:
+```
+kamov@msi:~/Desktop/tictactoe (main)$ docker compose up
+WARNING services.build: unsupported attribute        
+published port can't be set to a distinct value than container port: incompatible attribute
+```
+
 
