@@ -6,15 +6,15 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["ticktactoe.csproj", "./"]
-RUN dotnet restore "ticktactoe.csproj"
+RUN dotnet restore "Ticktactoe.csproj"
 COPY . .
 WORKDIR "/src/"
-RUN dotnet build "ticktactoe.csproj" -c Release -o /app/build
+RUN dotnet build "Ticktactoe.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "ticktactoe.csproj" -c Release -o /app/publish
+RUN dotnet publish "Ticktactoe.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ticktactoe.dll"]
+ENTRYPOINT ["dotnet", "Ticktactoe.dll"]
