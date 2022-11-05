@@ -207,4 +207,32 @@ WARNING services.build: unsupported attribute
 published port can't be set to a distinct value than container port: incompatible attribute
 ```
 
+Po zmianie portów spróbowałem ponownie zbudować aplikacje na AWS:
+```
+kamov@msi:~/Desktop/tictactoe (main)$ docker compose up
+WARNING services.build: unsupported attribute        
+WARNING services.links: unsupported attribute        
+WARNING services.scale: unsupported attribute        
+WARNING services.build: unsupported attribute        
+WARNING services.scale: unsupported attribute        
+WARNING services.restart: unsupported attribute      
+WARNING services.scale: unsupported attribute        
+WARNING networks.driver: unsupported attribute       
+[+] Running 13/13
+ ⠿ tictactoe                   DeleteComplete                                                                                                         26.1s
+ ⠿ BackendTCP7135TargetGroup   DeleteComplete                                                                                                         20.2s
+ ⠿ DefaultNetwork              DeleteComplete                                                                                                         21.4s
+ ⠿ BackendTaskExecutionRole    DeleteComplete                                                                                                         19.3s
+ ⠿ LoadBalancer                DeleteComplete                                                                                                         20.2s
+ ⠿ LogGroup                    DeleteComplete                                                                                                         20.2s
+ ⠿ DatabaseTCP5432TargetGroup  DeleteComplete                                                                                                         18.9s
+ ⠿ CloudMap                    DeleteComplete                                                                                                         18.9s
+ ⠿ TictactoeNetwork            DeleteComplete                                                                                                         20.2s
+ ⠿ Cluster                     DeleteComplete                                                                                                         18.9s
+ ⠿ DatabaseTaskExecutionRole   DeleteComplete                                                                                                         18.0s
+ ⠿ FrontendTCP8080TargetGroup  DeleteComplete                                                                                                         18.9s
+ ⠿ FrontendTaskExecutionRole   DeleteComplete                                                                                                         18.0s
+API: iam:CreateRole User: arn:aws:sts::818571164127:assumed-role/voclabs/user2254751=Maciej_Jur is not authorized to perform: iam:CreateRole on resource: arn:aws:iam::818571164127:role/tictactoe-BackendTaskExecutionRole-4OQETX4988BE because no identity-based policy allows the iam:CreateRole action
+```
 
+Niestety okazało się, że konto awsacademy jest niewystarczające do używania docker-compose z lini komend.
