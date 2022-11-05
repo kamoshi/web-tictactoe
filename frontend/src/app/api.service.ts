@@ -5,7 +5,7 @@ import {HttpClient} from "@angular/common/http";
   providedIn: 'root'
 })
 export class ApiService {
-  private readonly address = 'https://localhost:7135/api';
+  private readonly address = 'http://localhost:7135/api';
   private readonly endpoints = {
     login: 'Auth',
     leaderboard: 'Players/leaderboard',
@@ -16,7 +16,9 @@ export class ApiService {
 
   constructor(
     private http: HttpClient,
-  ) { }
+  ) {
+    console.log('TEST');
+  }
 
   getLeaderboard() {
     return this.http.get<LeaderboardDto[]>(`${this.address}/${this.endpoints.leaderboard}`);
