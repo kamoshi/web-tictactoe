@@ -5,14 +5,14 @@ services:
     build: ./frontend/
     image: kamov/tictactoe-frontend
     ports:
-      - 4200:80
+      - 8080:8080
     links:
       - backend
   backend:
     build: ./backend/
     image: kamov/tictactoe-backend
     ports:
-      - 7135:80
+      - 7135:7135
     environment:
       - DB_CONNECTION_STRING=Host=database;Port=5432;Username=postgres;Password=postgres;Database=tictactoe
     networks:
