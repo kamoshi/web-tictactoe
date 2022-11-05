@@ -6,8 +6,6 @@ services:
     image: kamov/tictactoe-frontend
     ports:
       - 8080:8080
-    links:
-      - backend
   backend:
     build: ./backend/
     image: kamov/tictactoe-backend
@@ -18,7 +16,8 @@ services:
     networks:
       - tictactoe
     depends_on:
-      - database
+      database:
+        condition: service_healthy
   database:
     image: postgres:alpine
     restart: always
@@ -30,6 +29,11 @@ services:
       - 5432:5432
     networks:
       - tictactoe
+    healthcheck:
+      test: pg_isready -U postgres -d tictactoe
+      interval: 10s
+      timeout: 3s
+      retries: 5
 
 networks:
   tictactoe:
