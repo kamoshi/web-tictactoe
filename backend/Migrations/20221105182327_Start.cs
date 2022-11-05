@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -12,9 +13,9 @@ namespace Tictactoe.Migrations
                 name: "Player",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -25,12 +26,12 @@ namespace Tictactoe.Migrations
                 name: "Game",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    State = table.Column<int>(type: "INTEGER", nullable: false),
-                    PlayerOId = table.Column<long>(type: "INTEGER", nullable: true),
-                    PlayerXId = table.Column<long>(type: "INTEGER", nullable: true),
-                    Board = table.Column<ulong>(type: "INTEGER", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    State = table.Column<int>(type: "integer", nullable: false),
+                    PlayerOId = table.Column<long>(type: "bigint", nullable: true),
+                    PlayerXId = table.Column<long>(type: "bigint", nullable: true),
+                    Board = table.Column<decimal>(type: "numeric(20,0)", nullable: false)
                 },
                 constraints: table =>
                 {
