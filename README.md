@@ -235,4 +235,43 @@ WARNING networks.driver: unsupported attribute
 API: iam:CreateRole User: arn:aws:sts::818571164127:assumed-role/voclabs/user2254751=Maciej_Jur is not authorized to perform: iam:CreateRole on resource: arn:aws:iam::818571164127:role/tictactoe-BackendTaskExecutionRole-4OQETX4988BE because no identity-based policy allows the iam:CreateRole action
 ```
 
-Niestety okazało się, że konto awsacademy jest niewystarczające do używania docker-compose z lini komend.
+Niestety okazało się, że konto awsacademy jest niewystarczające do używania docker-compose z lini komend, dlatego stworzyłem własne konto na AWS (Free tier). Na tym koncie stworzyłem użytkownika IAM, z odpowiednio ustawionymi Policy oraz dostępem przez Access Key.
+
+Tym razem otrzymałem komunikaty:
+```
+API: elasticloadbalancingv2:CreateTargetGroup User: arn:aws:iam::211784926821:user/docker-cli is not authorized to perform: ec2:DescribeInternetGateways
+API: elasticloadbalancingv2:CreateLoadBalancer User: arn:aws:iam::211784926821:user/docker-cli is not authorized to perform: ec2:DescribeAccountAttributes
+API: elasticloadbalancingv2:CreateLoadBalancer User: arn:aws:iam::211784926821:user/docker-cli is not authorized to perform: iam:CreateServiceLinkedRole on resource: arn:aws:iam::211784926821:role/aws-service-role/elasticloadbalancing.amazonaws.com/AWSServiceRoleForElasticLoadBalancing because no identity-based policy allows the iam:CreateServiceLinkedRole action
+```
+
+Uzupełniłem Policy, ale otrzymałem błąd:
+
+```
+Resource handler returned message: "User with accountId: 211784926821 is not authorized to perform CreateLogGroup with Tags (Service: CloudWatchLogs, Status Code: 400, Request ID: 30789b8d-efce-49e8-b37c-d34bd14e7b94)" (RequestToken: aff5d7c0-6cc1-ec1f-9a8b-c9e02e0d3a89, HandlerErrorCode: GeneralServiceException)
+```
+
+Dodałem następujące statements do Policy:
+```
+        {
+            "Sid": "EnableCreationAndManagementOfRDSCloudwatchLogEvents",
+            "Effect": "Allow",
+            "Action": [
+                "logs:GetLogEvents",
+                "logs:PutLogEvents"
+            ],
+            "Resource": "arn:aws:logs:*:*:log-group:/aws/rds/*:log-stream:*"
+        },
+        {
+            "Sid": "EnableCreationAndManagementOfRDSCloudwatchLogGroupsAndStreams",
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogStream",
+                "logs:DescribeLogStreams",
+                "logs:PutRetentionPolicy",
+                "logs:CreateLogGroup"
+            ],
+            "Resource": "arn:aws:logs:*:*:log-group:/aws/rds/*"
+        }
+```
+
+Ale nadal otrzymałem ten sam błąd.
