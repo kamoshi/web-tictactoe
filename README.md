@@ -9,6 +9,62 @@ W relacyjnej bazie danych trzymane są informacje dotyczące poszczególnych gie
 
 W obecnej wersji aplikacji pominięto konfigurację CORS oraz SSL.
 
+## Do działania aplikacji wymagane są:
+- Podstawowe
+    - Node v19.0.0
+    - .NET Core 6.0.110
+- Dodatkowe
+    - Docker 20.10.21
+    - Docker Compose CLI
+- Opcjonalne
+    - AWS CLI
+
+## Instalacja
+
+1. Przygotowanie katalogu
+```bash
+$ mkdir ~/Desktop/tictactoe && cd ~/Desktop/tictactoe/
+```
+
+2. Skopiowanie zawartości repozytorium git:  
+```bash
+$ git clone git@github.com:kamoshi/web-tictactoe.git
+```
+
+3. Przygotowanie obrazów
+```bash
+$ docker compose build
+```
+
+4. Uruchomienie aplikacji
+```
+$ docker compose up
+```
+
+### W przypadku uruchomienia AWS trzeba dodatkowo:
+
+4. Spushować obrazy na Docker Hub
+```
+$ docker compose push
+```
+
+5. Stworzyć context ECS w Dockerze
+```
+$ docker context create ecs awstictactoe
+```
+
+6. Skonfigurować context ECS
+
+7. Ustawić context na ECS
+```
+$ docker context use awsticatactoe
+```
+
+8. Uruchomić aplikację na AWS
+```
+$ docker compose up
+```
+
 ## Docker
 
 ### Frontend
@@ -17,7 +73,7 @@ Do budowania aplikacji Angular wykorzystywany jest obraz `node:alpine`. Zbudowan
 
 ### Backend
 
-Wykorzystano domyślny Dockerfile dla projektu ASP.NET Core 6.
+Backend jest napisany jako aplikacja ASP.NET Core 6.
 
 ### Baza danych
 
