@@ -1,0 +1,12 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name": "ttt-frontend",
+      "image": "818571164127.dkr.ecr.us-east-1.amazonaws.com/ttt-frontend:latest",
+      "hostname": "frontend",
+      "essential": true,
+      "memory": 256
+    }
+  ]
+}
