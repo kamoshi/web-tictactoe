@@ -6,6 +6,12 @@
       "image": "818571164127.dkr.ecr.us-east-1.amazonaws.com/ttt-backend",
       "hostname": "ttt-api",
       "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 7135,
+          "containerPort": 7135
+        }
+      ],
       "memory": 512
     },
     {
@@ -13,6 +19,12 @@
       "image": "818571164127.dkr.ecr.us-east-1.amazonaws.com/ttt-frontend",
       "hostname": "ttt-web",
       "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 8080,
+          "containerPort": 8080
+        }
+      ],
       "memory": 256
     },
     {
