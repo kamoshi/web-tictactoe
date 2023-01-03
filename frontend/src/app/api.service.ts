@@ -5,7 +5,7 @@ import {HttpClient} from "@angular/common/http";
   providedIn: 'root'
 })
 export class ApiService {
-  private readonly address = 'http://localhost:7135/api';
+  private readonly address = '/api';
   private readonly endpoints = {
     login: 'Auth',
     leaderboard: 'Players/leaderboard',
