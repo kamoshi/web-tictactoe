@@ -2,16 +2,32 @@
   "AWSEBDockerrunVersion": 2,
   "containerDefinitions": [
     {
-      "name": "front-test",
-      "image": "818571164127.dkr.ecr.us-east-1.amazonaws.com/ttt-frontend",
+      "name": "ttt-api",
+      "image": "818571164127.dkr.ecr.us-east-1.amazonaws.com/ttt-backend",
+      "hostname": "ttt-api",
       "essential": true,
-      "memory": 512,
+      "memory": 512
+    },
+    {
+      "name": "ttt-web",
+      "image": "818571164127.dkr.ecr.us-east-1.amazonaws.com/ttt-frontend",
+      "hostname": "ttt-web",
+      "essential": true,
+      "memory": 256
+    },
+    {
+      "name": "router",
+      "image": "818571164127.dkr.ecr.us-east-1.amazonaws.com/ttt-router",
+      "hostname": "router",
+      "essential": true,
       "portMappings": [
         {
           "hostPort": 80,
-          "containerPort": 8080
+          "containerPort": 80
         }
-      ]
+      ],
+      "links": ["ttt-web", "ttt-api"],
+      "memory": 128
     }
   ]
 }
