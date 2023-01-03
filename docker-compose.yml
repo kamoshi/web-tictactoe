@@ -6,14 +6,18 @@ services:
     ports:
       - 8081:80
     depends_on:
-      - backend
-      - frontend
-  frontend:
+      - ttt-api
+      - ttt-web
+    networks:
+      - router
+  ttt-web:
     build: ./frontend/
     image: kamov/tictactoe-frontend
     ports:
       - 8080:8080
-  backend:
+    networks:
+      - router
+  ttt-api:
     build: ./backend/
     image: kamov/tictactoe-backend
     ports:
@@ -21,6 +25,7 @@ services:
     environment:
       - DB_CONNECTION_STRING=Host=database;Port=5432;Username=postgres;Password=postgres;Database=tictactoe
     networks:
+      - router
       - tictactoe
     depends_on:
       database:
@@ -45,3 +50,6 @@ services:
 networks:
   tictactoe:
     driver: bridge
+  router:
+    driver: bridge
+
