@@ -12,7 +12,13 @@
           "containerPort": 7135
         }
       ],
-      "memory": 512
+      "memory": 512,
+      "environment": [
+        {
+          "name": "DB_CONNECTION_STRING",
+          "value": "Host=database;Port=5432;Username=postgres;Password=postgres;Database=tictactoe"
+        }
+      ]
     },
     {
       "name": "ttt-web",
