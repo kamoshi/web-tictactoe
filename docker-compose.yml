@@ -1,6 +1,13 @@
 version: "3.9"
 
 services:
+  router:
+    build: ./router/
+    ports:
+      - 8081:80
+    depends_on:
+      - backend
+      - frontend
   frontend:
     build: ./frontend/
     image: kamov/tictactoe-frontend
