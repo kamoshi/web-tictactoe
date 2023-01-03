@@ -2,11 +2,16 @@
   "AWSEBDockerrunVersion": 2,
   "containerDefinitions": [
     {
-      "name": "ttt-frontend",
-      "image": "818571164127.dkr.ecr.us-east-1.amazonaws.com/ttt-frontend:latest",
-      "hostname": "frontend",
+      "name": "front-test",
+      "image": "818571164127.dkr.ecr.us-east-1.amazonaws.com/ttt-frontend",
       "essential": true,
-      "memory": 256
+      "memory": 512,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 8080
+        }
+      ]
     }
   ]
 }
