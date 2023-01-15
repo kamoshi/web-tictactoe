@@ -31,6 +31,12 @@ Korzystając z AWS CloudWatch stworzyłem alarm dla wykorzystania CPU w klastrze
 
 ![CloudTrail](.markdown/Screenshot_20230115_174945.png)
 
+![CloudTrail](.markdown/Screenshot_20230115_190801.png)
+
+![CloudTrail](.markdown/Screenshot_20230115_190943.png)
+
+![CloudTrail](.markdown/Screenshot_20230115_191056.png)
+
 ## Wykorzystaj AWS Inspector w swojej aplikacji
 
 Próbując włączyć AWS Inspector na koncie studenckim AWS Academy natrafiłem na błąd uprawnień:
@@ -42,3 +48,7 @@ Ale po przełączeniu na wersję klasyczną udało się uruchomić tę usługę.
 ![Classic AWS Inspector](.markdown/Screenshot_20230115_173132.png)
 
 ![AWS Inspector started](.markdown/Screenshot_20230115_173148.png)
+
+![AWS Inspector](.markdown/Screenshot_20230115_175209.png)
+
+![AWS Inspector](.markdown/Screenshot_20230115_190631.png)
