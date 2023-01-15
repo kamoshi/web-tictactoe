@@ -9,7 +9,13 @@ Backup został aktywowany w trybie natychmiastowym (czas wykonania 1h), natomias
 
 ![Backup RDS](.markdown/Screenshot_20230115_153133.png)
 
+![Backup RDS](.markdown/Screenshot_20230115_170219.png)
+
 ## Użyj zapisanego backupu bazy danych, aby przywrócić dane do bazy danych używanej przez aplikację
+
+![Restore point](.markdown/Screenshot_20230115_170527.png)
+
+![DB restore](.markdown/Screenshot_20230115_171853.png)
 
 ## Utwórz konfigurację dla Cloudwatch a następnie zdefiniuj własny alarm
 
