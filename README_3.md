@@ -19,4 +19,12 @@ Korzystając z AWS CloudWatch stworzyłem alarm dla wykorzystania CPU w klastrze
 
 ## Utwórz konfigurację dla CloudTrail oraz sprawdź historię eventów
 
+Usługa AWS CloudTrail nie jest dostępna na koncie dostępnym poprzez AWS Academy:
+
+![AWS CloudTrail](.markdown/Screenshot_20230115_155716.png)
+
 ## Wykorzystaj AWS Inspector w swojej aplikacji
+
+Próbując włączyć AWS Inspector na koncie studenckim AWS Academy natrafiłem na błąd uprawnień:
+
+![AWS Inspector](.markdown/Screenshot_20230115_160441.png)
