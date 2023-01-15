@@ -16,7 +16,7 @@
       "environment": [
         {
           "name": "DB_CONNECTION_STRING",
-          "value": "Host=awseb-e-uymamqabur-stack-awsebrdsdatabase-zov6cz0h9ais.cob11mf5uvvv.us-east-1.rds.amazonaws.com;Port=5432;Username=postgres;Password=postgres;Database=tictactoe"
+          "value": "Host=awseb-e-v936v5tumu-stack-awsebrdsdatabase-iwhdruf32tnv.cob11mf5uvvv.us-east-1.rds.amazonaws.com;Port=5432;Username=postgres;Password=postgres;Database=tictactoe"
         }
       ]
     },

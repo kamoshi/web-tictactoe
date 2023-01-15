@@ -19,6 +19,10 @@ Backup został aktywowany w trybie natychmiastowym (czas wykonania 1h), natomias
 
 ![DB restore](.markdown/Screenshot_20230115_173911.png)
 
+![DB restore](.markdown/Screenshot_20230115_195834.png)
+
+![DB restore](.markdown/Screenshot_20230115_195851.png)
+
 ## Utwórz konfigurację dla Cloudwatch a następnie zdefiniuj własny alarm
 
 Korzystając z AWS CloudWatch stworzyłem alarm dla wykorzystania CPU w klastrze ECS dla środowiska aplikacji webowej. Jako threshold alarmu ustawiłem 50%.
