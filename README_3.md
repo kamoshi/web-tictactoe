@@ -71,6 +71,10 @@ Każdy jeden plik jest skompresowany, ale można go podejrzeć w przeglądarce w
 
 ![CloudTrail](.markdown/Screenshot_20230115_191056.png)
 
+Poniżej widoczne są eventy CloudTrail, między innymi ustawianie alertów, oraz logowanie do konsoli.
+
+![CloudTrail](.markdown/Screenshot_20230117_140128.png)
+
 ## Wykorzystaj AWS Inspector w swojej aplikacji
 
 Próbując włączyć AWS Inspector na koncie studenckim AWS Academy natrafiłem na błąd uprawnień:
